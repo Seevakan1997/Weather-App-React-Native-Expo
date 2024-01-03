@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, Image, SafeAreaView, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, SafeAreaView, TextInput, StyleSheet, TouchableOpacity, ScrollView,KeyboardAvoidingView,Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { theme } from '../theme/theme';
 import { fetchLocations, fetchWeatherForecast } from '../api/weather';
@@ -8,7 +8,7 @@ import {MagnifyingGlassIcon} from 'react-native-heroicons/outline'
 import {MapPinIcon,CalendarDaysIcon} from 'react-native-heroicons/solid'
 import { debounce } from "lodash";
 import { weatherImages } from '../constants/constants';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const Weather = () => {
     const [showSearch,toggleSearch] = useState(false);
@@ -64,6 +64,10 @@ const Weather = () => {
     const {location, current} = weather;
 
     return (
+        <ScrollView
+        contentContainerStyle={styles.containerScroll}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.mainContainer}>
             <StatusBar style='light' />
             <Image
@@ -185,6 +189,7 @@ const Weather = () => {
           )
             }
         </View>
+        </ScrollView>
     );
 };
 
@@ -194,6 +199,11 @@ const styles = StyleSheet.create({
         flex:1,
         position: 'relative'
     },
+    containerScroll:{
+        flexGrow: 1,
+        height: hp('100%'),
+        width: wp('100%') 
+    },
     circleSnail:{
         flex:1, 
         flexDirection:'row',
@@ -202,7 +212,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        display:'flex'
+        display:'flex',
     },
     backgroundImage: {
         position: 'absolute',
@@ -266,7 +276,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-around',
         flex: 1,
-        marginBottom: 8
+        marginBottom: 8,
+        marginTop:12
     },
     forecastName:{
         color: 'white',
